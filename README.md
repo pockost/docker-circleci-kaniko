@@ -3,6 +3,14 @@
 Circle CI requires machine container to have /bin/sh .
 This Container is added /bin/sh .
 
+## how about kaniko
+
+kaniko is a tool to build container image inside a container.
+
+https://github.com/GoogleContainerTools/kaniko
+
+## .circleci/config.yml Sample
+
 ```yaml
 version: 2.1
 jobs:
@@ -13,13 +21,11 @@ jobs:
       - checkout
       - run:
           name: add credential
-          shell: /busybox/sh -eo pipefail
           command: |
             mkdir /secret
             echo $CREDENTIAL_JSON > /secret/credential.json
       - run:
           name: build
-          shell: /busybox/sh -eo pipefail
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: /secret/credential.json
           command: |
