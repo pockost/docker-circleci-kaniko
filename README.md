@@ -3,6 +3,8 @@
 Circle CI requires machine container to have /bin/sh .
 This Container is added /bin/sh .
 
+https://hub.docker.com/repository/docker/74th/circleci-kaniko
+
 ## how about kaniko
 
 kaniko is a tool to build container image inside a container.
