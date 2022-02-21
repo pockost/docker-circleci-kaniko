@@ -1,9 +1,11 @@
 # kaniko for CircleCI
 
+Based on https://github.com/74th/circleci-kaniko
+
 Circle CI requires machine container to have /bin/sh .
 This Container is added /bin/sh .
 
-https://hub.docker.com/repository/docker/74th/circleci-kaniko
+https://hub.docker.com/repository/docker/pockost/circleci-kaniko
 
 ## how about kaniko
 
@@ -18,20 +20,17 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: 74th/kaniko-circleci:v1.19.0
+      - image: 74th/kaniko-circleci:v1.7.0
     steps:
       - checkout
       - run:
           name: add credential
           command: |
-            mkdir /secret
-            echo $CREDENTIAL_JSON > /secret/credential.json
+            mkdir -p /kaniko/.docker
+            echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
       - run:
           name: build
-          environment:
-            GOOGLE_APPLICATION_CREDENTIALS: /secret/credential.json
           command: |
-            executor --dockerfile /root/project/dashdoc/Dockerfile \
-              --destination "gcr.io/nnyn-dev/mycheatseets" \
-              --context dir:///root/project/dashdoc
+            /kaniko/executor --dockerfile Dockerfile \
+              --destination "registery.io/teams/project:latest"
 ```
